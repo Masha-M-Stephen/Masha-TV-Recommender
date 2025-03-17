@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masha's TV Show Recommendations</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        .latest-shows {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .show-card {
+            width: 145px;
+            height: 175px;
+            background-size: cover;
+            background-position: center;
+            margin: 10px;
+            opacity: 1;
+            transition: opacity 0.5s;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .recommendations {
+            display: none;
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .recommendations.visible {
+            display: block;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .recommendations img {
+            border-radius: 4px;
+        }
+
+        #clear-recommendations {
+            display: none; /* Initially hide the clear button */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Masha's TV Show Recommendations</h1>
+
+    <form method="POST">
+        <label for="show_name">Enter TV Show Name:</label>
+        <input type="text" name="show_name" id="show_name" required>
+        <button type="submit">Get Recommendations</button>
+    </form>
+
+    <button id="clear-recommendations" onclick="clearRecommendations()">Clear Recommendations</button>
+
+    <div id="latest-shows" class="latest-shows">
+        {% for show in latest_shows %}
+        <div class="show-card" style="background-image: url('{{ show['image_url'] }}');" title="{{ show['name'] }}">
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="recommendations" class="recommendations">
+        {% if recommendations %}
+            <h2>Recommendations based on: {{ request.form['show_name'] }}</h2>
+            <ul>
+                {% for show in recommendations %}
+                    <li>
+                        <h3>{{ show['name'] }}</h3>
+                        <p>Genres: {{ show['genres'] }}</p>
+                        <p>Rating: {{ show['rating'] }}</p>
+                        <p>Premiered: {{ show['premiered'] }}</p>
+                        <p>{{ show['summary'] }}</p>
+                        {% if show['image_url'] %}
+                            <img src="{{ show['image_url'] }}" alt="{{ show['name'] }}" style="width: 100px; height: auto;">
+                        {% else %}
+                            <p>No image available</p>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% elif error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% else %}
+            <p>No recommendations available based on your input.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Hide the latest shows once recommendations are displayed
+        {% if recommendations %}
+            document.getElementById('latest-shows').style.display = 'none';
+            document.getElementById('recommendations').classList.add('visible');
+            document.getElementById('clear-recommendations').style.display = 'block'; // Show clear button
+        {% endif %}
+
+        function clearRecommendations() {
+            document.getElementById('recommendations').classList.remove('visible');
+            document.getElementById('latest-shows').style.display = 'flex';
+            document.getElementById('clear-recommendations').style.display = 'none';
+            // Clear the content of the recommendations div
+            document.getElementById('recommendations').innerHTML = "";
+        }
+    </script>
+
+</body>
+
+</html>
