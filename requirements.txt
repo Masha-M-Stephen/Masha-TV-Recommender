@@ -1,7 +1,6 @@
 Flask
 gunicorn
 pandas
-sqlite3
 numpy
 flask 
 sklearn
