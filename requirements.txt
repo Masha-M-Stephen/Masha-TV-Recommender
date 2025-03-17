@@ -3,7 +3,7 @@ gunicorn
 pandas
 numpy
 flask 
-sklearn
+scikit-learn
 bs4 
 rapidfuzz
 threading
