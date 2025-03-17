@@ -1,3 +1,11 @@
 Flask
 gunicorn
 pandas
+sqlite3
+numpy
+flask 
+sklearn
+bs4 
+rapidfuzz
+threading
+datetime
