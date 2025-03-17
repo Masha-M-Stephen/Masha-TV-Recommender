@@ -2,9 +2,6 @@ Flask
 gunicorn
 pandas
 numpy
-flask 
 scikit-learn
-bs4 
+bs4
 rapidfuzz
-threading
-datetime
